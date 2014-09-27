@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2014/09/27 23:23:07 by takiapo          ###   ########.fr        #
+#    Updated: 2014/09/27 23:29:37 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ all : $(OBJECT) $(NAME)
 $(NAME):
 	@make -C libft/
 	@$(CC) $(NAME) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIBFT) $(SRC)
-
+	@ln -f $(NAME) libft_malloc.so
 clean :
 	@make -C libft/ clean
 	@rm -rf $(OBJECTS)
@@ -53,6 +53,7 @@ fclean : clean
 	@make -C libft/ fclean
 	@rm -rf $(NAME)
 	@echo 'fclean'
+	@rm libft_malloc.so
 
 re: fclean all
 
