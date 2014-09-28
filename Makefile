@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2014/09/27 23:29:37 by takiapo          ###   ########.fr        #
+#    Updated: 2014/09/27 23:45:50 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,6 @@ fclean : clean
 	@make -C libft/ fclean
 	@rm -rf $(NAME)
 	@echo 'fclean'
-	@rm libft_malloc.so
 
 re: fclean all
 
