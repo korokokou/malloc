@@ -6,19 +6,18 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/27 13:27:18 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/28 21:59:35 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../includes/malloc.h"
 
-extern	t_block	*g_tiny_malloc;
-extern	t_block	*g_small_malloc;
-extern	t_block	*g_large_malloc;
+extern t_malloc	*g_wall;
 
 void			free_large(t_block *p, int size)
 {
-	if (p == g_large_malloc)
-		g_large_malloc = p->next;
+	if (p == g_wall->large)
+		g_wall->large = p->next;
 	if (p->back)
 		p->back->next = p->next;
 	if (p->next)
@@ -37,26 +36,26 @@ void			free_less(t_block *p)
 		temp->next->next->back = temp;
 		temp->size += temp->next->size;
 	}
-	if (p == g_small_malloc)
-		g_small_malloc = p->next;
-	if (p == g_tiny_malloc)
-		g_tiny_malloc = p->next;
+	if (p == g_wall->small)
+		g_wall->small = p->next;
+	if (p == g_wall->tiny)
+		g_wall->tiny = p->next;
 	if (temp->back && temp->back->freed == 1)
 	{
 		temp->back->next = p->next;
 		temp->back->size += p->size;
 	}
 	temp->freed = 1;
-	if (!g_small_malloc && !temp->back && p->size == getpagesize() * 2)
+	if (!g_wall->tiny && !temp->back && p->size == getpagesize() * 2)
 		munmap(p, p->size);
-	if (!g_tiny_malloc && !temp->back && p->size == getpagesize() * 8)
+	if (!g_wall->small && !temp->back && p->size == getpagesize() * 8)
 		munmap(p, p->size);
 	p = NULL;
 }
 
-void			free(void	*p)
+void			free(void *p)
 {
-	t_block 	*temp;
+	t_block		*temp;
 	int			i;
 
 	i = sizeof(t_block);
