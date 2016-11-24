@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2014/09/27 23:45:50 by takiapo          ###   ########.fr        #
+#    Updated: 2016/11/24 11:20:42 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-WFLAGS = -Wall -Wextra -Werror
+WFLAGS = -Wall -Wextra -Werror -g
 
 CC = gcc -o
 
@@ -28,10 +28,9 @@ OBJDIR = obj
 
 LIBFT = -L libft/ -lft
 
-SRC = 	src/free.c\
-		src/malloc.c\
-		src/large_malloc.c\
-		src/show_alloc_mem.c
+SRC = 	\
+		src/malloc.c
+	#	src/show_alloc_mem.c
 
 OBJECTS = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
@@ -43,7 +42,7 @@ all : $(OBJECT) $(NAME)
 $(NAME):
 	@make -C libft/
 	@$(CC) $(NAME) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIBFT) $(SRC)
-	@ln -f $(NAME) libft_malloc.so
+	@ln -Fs $(NAME) libft_malloc.so
 clean :
 	@make -C libft/ clean
 	@rm -rf $(OBJECTS)

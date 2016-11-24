@@ -6,16 +6,17 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/28 21:55:13 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/19 18:24:39 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
-extern t_malloc		*wall;
+
+extern t_malloc		g_wall;
 
 void				initialise_first(t_malloc **wall)
 {
-	t_malloc 		*temp;
+	t_malloc		*temp;
 
 	temp = mmap(NULL, (sizeof(t_malloc)), PROT_READ | PROT_WRITE, MAP_ANON |
 			MAP_PRIVATE, -1, 0);

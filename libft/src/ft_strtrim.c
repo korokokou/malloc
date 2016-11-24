@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/05/08 20:13:35 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/13 17:04:48 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/05/18 14:44:55 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -19,6 +19,7 @@ char	*ft_strtrim(const char *s)
 	char	*ret;
 
 	i = 0;
+	len = ft_strlen(s);
 	while (s[len] == ' ' || s[len] == '\n' || s[len] == '\t')
 		len--;
 	while (s[i] == ' ' || s[i] == '\n' || s[i] == '\t')

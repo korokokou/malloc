@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/28 21:59:35 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/19 18:26:33 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ void			free_less(t_block *p)
 	p = NULL;
 }
 
+int				check(t_block *p)
+{
+	return (p == p->ptr);
+}
+
 void			free(void *p)
 {
 	t_block		*temp;
@@ -60,7 +65,7 @@ void			free(void *p)
 
 	i = sizeof(t_block);
 	p -= i;
-	if (p)
+	if (p && check(p))
 	{
 		temp = (t_block *)p;
 		if (temp->size > 256)

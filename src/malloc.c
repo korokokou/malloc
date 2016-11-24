@@ -6,64 +6,73 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/28 21:59:03 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/24 16:33:36 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-t_malloc				*g_wall = NULL;
+t_malloc				g_wall = (t_malloc){0, 0, sizeof(t_map), sizeof(t_block)};
 
-void					*put_data(void *ret, int size, t_block *new, int state)
+void					*block_it(void *ret, int size)
 {
 	t_block			data;
 
-	if (g_wall->g_size == 0)
-		g_wall->g_size = sizeof(t_block);
-	(void)data;
 	data.size = size;
-	data.freed = state;
-	if (new)
-	{
-		data.next = new->next;
-		new->next = ret;
-	}
-	else
-		data.next = NULL;
-	data.back = new;
-	if (new && new->next)
-		new->next->back = ret;
-	ret = memcpy(ret, (void *)(&data), g_wall->g_size);
+	data.next = NULL;
+	data.freed = 0;
+	data.ptr = ret;
+	ret = memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
 
-void					*initialize(t_block **list, int zone, t_block *temp)
+void					map_it(void *new, int size, int type)
 {
-	temp = *list;
-	if (*list && zone > 0)
-		return (temp = *list);
-	temp = mmap(NULL, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,
-			-1, 0);
-	if (temp == (void *)-1)
-		return (NULL);
-	temp = put_data(temp, zone, temp, 1);
-	if (!*list)
-		*list = temp;
-	return (temp);
+	t_map				data;
+
+	data.type = type;
+	data.size = size;
+	data.next = NULL;
+	data.region = block_it(new + g_wall.map_size, size);
+	memcpy(new, (void *)(&data), g_wall.map_size);
 }
 
-void					*downsize(void *current, int size, int left)
+void					*initialize(unsigned int type)
 {
-	char			*next;
-	t_block			*temp;
+	void				*new;
+	t_map				*temp;
+	int					zone_size;
 
-	next = (char *)current + size + g_wall->g_size;
-	temp = (t_block *)current;
-	if (left <= g_wall->g_size)
-		size = temp->size;
-	current = put_data(current, size, current, 0);
-	if (left > g_wall->g_size)
-		temp->next = put_data(next, left, current, 1);
+	if (type == 0)
+		zone_size = g_wall.page_size << 1;
+	else if (type == 1)
+		zone_size = g_wall.page_size << 3;	
+	else
+		zone_size = type;
+	new = mmap(NULL, zone_size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,
+			-1, 0);
+	if (new == (void *)-1)
+		return (NULL);
+	map_it(new, type, zone_size);
+	if (!g_wall.countries)
+		return (g_wall.countries = new); 
+	else
+	{
+		temp = g_wall.countries;
+		while (temp->next)
+			temp = temp->next;
+	}
+	return (temp->next = new);
+}
+
+void					*downsize(t_block *current, int size)
+{
+	t_block			*temp;
+	int				next_size;
+
+	temp = current;
+	temp = block_it(temp, size);
+	temp->next = block_it(temp + size, next_size);
 	return (current);
 }
 
@@ -72,50 +81,70 @@ void					*find_place(t_block *list, int size)
 	int				j;
 	t_block			*temp;
 
-	j = 0;
-	if (size > 0)
-		temp = list;
-	if (size < 0)
-		return (list);
+	temp = list;
 	while (temp)
 	{
-		if (temp->freed && temp->size - ABS(size) - g_wall->g_size >= 0)
-			return (downsize(temp, size, temp->size - size - g_wall->g_size));
-		j += (temp->size + g_wall->g_size);
-		if (temp->next == NULL)
-			list = temp;
+		if (temp->freed && temp->size - size >= 0)
+			return (downsize(temp, size));
 		temp = temp->next;
 	}
-	list->next = initialize(&temp, j, temp);
-	temp->back = list;
-	return (find_place(list, size));
+	return (NULL);
+}
+
+void					*find_zone(int size, int type)
+{
+	t_map				*temp;
+	t_block				*ret;
+
+	temp = g_wall.countries;
+	ret = NULL;
+	while (temp)
+	{
+		if (temp->type == type && temp->left < size)
+		{
+			if ((ret = find_place(temp->region, size)) != NULL)
+				return (ret);
+		}
+		temp = temp->next;
+	}
+	temp = initialize(type);
+	ret = find_place(temp->region, size);
+	return (ret);
+}
+
+int						get_type_of_country(int size)
+{
+	if (size <= 128)
+		return (0);
+	else if (size <= 1024)
+		return (1);
+	else 
+		return (size);
 }
 
 void					*malloc(size_t size)
 {
-	static size_t		i = 0;
-	void				*back;
-	t_block				*temp;
+	int 	type;
 
-	temp = NULL;
-	if (g_wall == NULL)
-		initialise_first(&g_wall);
-	if (g_wall == NULL)
+	if (g_wall.page_size == 0)
+		g_wall.page_size = getpagesize();
+	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
-	if (i == 0)
-		i = getpagesize();
-	if (size == 0 || i == 0)
-		return (NULL);
-	if (g_wall->g_size == 0)
-		g_wall->g_size = sizeof(t_block);
-	size = (((size - 1) >> 3) << 3) + 8;
-	if (size <= 48)
-		temp = initialize(&g_wall->tiny, i << 1, temp);
-	else if (size > 48 && size <= 256)
-		temp = initialize(&g_wall->small, i << 3, temp);
-	else
-		temp = large_malloc(&g_wall->large, (int *)&size, temp);
-	if (temp == (void *)-1 || !(back = find_place(temp, size)))
-		return (NULL);
-	return (back + g_wall->g_size);
+	if (g_wall.map_size == 0)
+		g_wall.map_size = sizeof(t_map);
+	type = get_type_of_country(size);
+	size += g_wall.map_size;
+	size = ALIGN(size);
+	return (&g_wall.map_size);
+}
+
+#include <stdio.h>
+
+int main()
+{
+	printf("%d\n", g_wall.map_size);
+	malloc(0);
+	printf("%d\n", g_wall.block_size);
+	malloc(0);
+	printf("%lu %lu\n", sizeof(int), sizeof(void *));
 }
