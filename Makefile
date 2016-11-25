@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2016/11/24 11:20:42 by takiapo          ###   ########.fr        #
+#    Updated: 2016/11/25 10:37:24 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,40 +18,48 @@ endif
 
 WFLAGS = -Wall -Wextra -Werror -g
 
-CC = gcc -o
+CC = gcc 
 
 LIBFLAG = -shared
 
-SRCDIR = src
+SRCDIR = src/
 
 OBJDIR = obj
 
-LIBFT = -L libft/ -lft
+LIB = -L libft/ -lft
 
 SRC = 	\
-		src/malloc.c
+		malloc.c \
+		free.c
 	#	src/show_alloc_mem.c
 
-OBJECTS = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJECTS = $(patsubst %.c, $(OBJDIR)/%.o, $(SRC))
 
 INCLUDE = -I includes/
 
 
-all : $(OBJECT) $(NAME)
+all : $(NAME)
 
-$(NAME):
-	@make -C libft/
-	@$(CC) $(NAME) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIBFT) $(SRC)
-	@ln -Fs $(NAME) libft_malloc.so
+$(NAME) : $(LIBFT) $(OBJECTS)
+	$(CC) -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) 
+	ln -Fs $(NAME) libft_malloc.so
+
+$(LIBFT) :
+	make -C libft/
+
+$(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -o $@  -c $^
+
 clean :
-	@make -C libft/ clean
-	@rm -rf $(OBJECTS)
-	@echo 'clean'
+	echo 'clean'
+	make -C libft/ clean
+	rm -rf $(OBJECTS)
 
 fclean : clean
-	@make -C libft/ fclean
-	@rm -rf $(NAME)
-	@echo 'fclean'
+	echo 'fclean'
+	make -C libft/ fclean
+	rm -rf $(NAME)
 
 re: fclean all
 
