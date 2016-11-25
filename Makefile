@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2016/11/25 10:37:24 by takiapo          ###   ########.fr        #
+#    Updated: 2016/11/25 11:32:34 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,15 +41,16 @@ INCLUDE = -I includes/
 all : $(NAME)
 
 $(NAME) : $(LIBFT) $(OBJECTS)
-	$(CC) -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) 
+	make -C libft/
+	$(CC) -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) -g 
 	ln -Fs $(NAME) libft_malloc.so
 
-$(LIBFT) :
+$(LIBFT)  : libft/libft.a
 	make -C libft/
 
 $(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
 	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@  -c $^
+	$(CC) $(CFLAGS) -o $@  -c $^ -g
 
 clean :
 	echo 'clean'

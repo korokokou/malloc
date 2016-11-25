@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/25 10:14:08 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/25 14:51:09 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void			*block_it(void *ret, int size)
 	data.next = NULL;
 	data.freed = 1;
 	data.ptr = ret + g_wall.block_size;
-	ret = memcpy(ret, (void *)(&data), g_wall.block_size);
-	printf("example %d %d\n", data.size, data.freed);
+	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
 
@@ -37,8 +36,10 @@ void			map_it(void *new, int type, int size)
 	data.type = type;
 	data.size = size;
 	data.next = NULL;
+	data.left = 0;
+	data.region = NULL;
+	ft_memcpy(new, (void *)(&data), g_wall.map_size);
 	data.region = block_it(new + g_wall.map_size, size);
-	memcpy(new, (void *)(&data), g_wall.map_size);
 }
 
 void			*initialize(unsigned int type)
@@ -57,7 +58,6 @@ void			*initialize(unsigned int type)
 			-1, 0);
 	if (new == (void *)-1)
 		return (NULL);
-	printf("initialize\n");
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
@@ -108,21 +108,16 @@ void			*find_zone(int type, int size)
 	{
 		if (temp->type == type && temp->left < size)
 		{
-		printf("zone");
 			if ((ret = find_place(temp->region, size)) != NULL)
+			{
+				temp->left++;
 				return (ret);
+			}
 		}
 		temp = temp->next;
 	}
 	temp = initialize(type);
-	if (temp == NULL)
-		ft_putendl("initialize");
 	ret = find_place(temp->region, size);
-	if (ret == NULL)
-		{
-			ft_putendl("salut");
-			exit(0);
-		}
 	return (ret);
 }
 
@@ -136,7 +131,7 @@ int				get_type_of_country(int size)
 		return (size);
 }
 
-void			*fmalloc(size_t size)
+void			*malloc(size_t size)
 {
 	int			type;
 	void		*ret;
@@ -151,6 +146,17 @@ void			*fmalloc(size_t size)
 	size += g_wall.map_size;
 	size = ALIGN(size);
 	ret = find_zone(type, size);
+	return (ret);
+}
+
+void			*calloc(size_t count, size_t size)
+{
+	void		*ret;
+
+	ret = malloc(count * size);
+	if (!ret)
+		return (NULL);
+	ft_bzero(ret, count * size);
 	return (ret);
 }
 
