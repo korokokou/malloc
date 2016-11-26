@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/28 22:06:33 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/24 16:13:13 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/26 15:53:51 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct		s_map
 	size_t			size;
 	int				type;
 	int				left;
+	void			*end;
+	void 			*start;
 	struct s_map	*next;
 }					t_map;
 
