@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2016/11/25 11:32:34 by takiapo          ###   ########.fr        #
+#    Updated: 2016/11/30 07:08:03 by takiapo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ all : $(NAME)
 $(NAME) : $(LIBFT) $(OBJECTS)
 	make -C libft/
 	$(CC) -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) -g 
-	ln -Fs $(NAME) libft_malloc.so
+	ln -fs $(NAME) libft_malloc.so
 
 $(LIBFT)  : libft/libft.a
 	make -C libft/

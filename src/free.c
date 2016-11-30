@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/25 12:01:10 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/30 13:27:33 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,13 @@ void			free(void *p)
 {
 	t_block		*temp;
 	t_map		*country;
+	char		*cast;
 
 	if (!check(p, &country))
 		return ;
-	p -= g_wall.block_size;
-	temp = (t_block *)p;
+	cast = p;
+	cast -= g_wall.block_size;
+	temp = (t_block *)cast;
 	temp->freed = 1;
 	country->left--;
 	//	coalesce(p);

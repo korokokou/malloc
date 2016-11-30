@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/26 15:58:38 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/11/30 13:55:49 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void			*block_it(void *ret, int size, t_map *map)
 	data.freed = 1;
 	(void )map;
 	data.ptr = ret + g_wall.block_size;
+	ft_bzero(ret, g_wall.block_size);
 	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
@@ -33,14 +34,17 @@ void			*block_it(void *ret, int size, t_map *map)
 void			map_it(void *new, int type, int size)
 {
 	t_map			data;
+	char			*cast;
 
 	data.type = type;
 	data.size = size;
 	data.next = NULL;
 	data.left = 0;
 	data.region = NULL;
+	cast = new;
+	ft_bzero(new, g_wall.map_size);
 	ft_memcpy(new, (void *)(&data), g_wall.map_size);
-	((t_map *)new)->region = block_it(new + g_wall.map_size, size, NULL);
+	((t_map *)new)->region = block_it(cast + g_wall.map_size, size, NULL);
 }
 
 void			*initialize(unsigned int type)
@@ -58,11 +62,11 @@ void			*initialize(unsigned int type)
 	new = mmap(NULL, zone_size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,
 			-1, 0);
 	char *tmp = new;
-	int	i = 0;
+	int i = 0;
 	while (i < zone_size)
 	{
 		tmp[i] = i;
-		i++;
+			i++;
 	}
 	if (new == (void *)-1)
 		return (NULL);
@@ -82,13 +86,15 @@ void			*initialize(unsigned int type)
 void			*downsize(t_block *current, int size, t_map *map)
 {
 	t_block			*temp;
+	char			*cast;
 	int				next_size;
 
 	temp = current;
+	cast = (char *)temp;
 	temp->freed = 0;
-	next_size = current->size - size;
+	next_size = current->size - size - g_wall.block_size;
 	temp->size = size;
-	temp->next = block_it(temp + size, next_size, map);
+	temp->next = block_it(cast + size, next_size, map);
 	return (temp->ptr);
 }
 
@@ -106,7 +112,7 @@ void			*find_place(t_block *list, int size, t_map *map)
 	return (NULL);
 }
 
-void			*find_zone(int type, int size)
+char			*find_zone(int type, int size)
 {
 	t_map		*temp;
 	t_block		*ret;
@@ -120,14 +126,14 @@ void			*find_zone(int type, int size)
 			if ((ret = find_place(temp->region, size, temp)) != NULL)
 			{
 				temp->left++;
-				return (ret);
+				return ((char *)ret);
 			}
 		}
 		temp = temp->next;
 	}
 	temp = initialize(type);
 	ret = find_place(temp->region, size, temp);
-	return (ret);
+	return ((char *)ret);
 }
 
 int				get_type_of_country(int size)
@@ -167,3 +173,47 @@ void			*calloc(size_t count, size_t size)
 	return (ret);
 }
 
+void			*reallocf(void *ptr, size_t size)
+{
+	void		*ret;
+
+	ret = realloc(ptr, size);
+	if (ret != ptr)
+		free (ptr);
+}
+
+void			upsize(void)
+		
+		
+		
+
+void			*realloc(void *ptr, size_t size)
+{
+	void		*ret;
+	char		*cast;
+	t_block		*next;
+
+	if (ptr == NULL)
+		return (malloc(size));
+	if (!check(p))
+		return (NULL);
+	if (size == 0)
+	{
+		free(ptr);
+		return (find_zone(0, 0));
+	}
+	cast = ptr;
+	cast -= g_wall.block_size;
+	next = (t_block *)cast->next;
+	if (next && next->freed == 1 && next->size + cast->size <= size)
+	{
+		cast->size = size;
+		cast->next = block_it(cast + size, next->size + cast->size, map);
+		cast->next->next = next->next;
+		return (cast);
+	}
+	ret = malloc(size);
+	ft_memcpy(ret, ptr, ptr->size);
+	free(ptr);
+	return (ret);
+}
