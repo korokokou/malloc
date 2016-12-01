@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/30 13:27:33 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:23:45 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int				check(t_block *p, t_map **country)
 	{
 		if (p >= temp->region && p <= temp->region + temp->size)
 		{
-			*country = temp;
+			if (country)
+				*country = temp;
 			return (1);
 		}
 		temp = temp->next;
@@ -46,5 +47,4 @@ void			free(void *p)
 	temp = (t_block *)cast;
 	temp->freed = 1;
 	country->left--;
-	//	coalesce(p);
 }

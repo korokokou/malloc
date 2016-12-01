@@ -6,14 +6,11 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/11/30 13:55:49 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/01 13:12:37 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
-#include <stdio.h>
-#include "../includes/get_next_line.h"
-#include <fcntl.h>
 
 t_malloc		g_wall = (t_malloc){0, 0, sizeof(t_map), sizeof(t_block)};
 
@@ -93,7 +90,7 @@ void			*downsize(t_block *current, int size, t_map *map)
 	cast = (char *)temp;
 	temp->freed = 0;
 	next_size = current->size - size - g_wall.block_size;
-	temp->size = size;
+	temp->size = size - g_wall.block_size;
 	temp->next = block_it(cast + size, next_size, map);
 	return (temp->ptr);
 }
@@ -161,7 +158,7 @@ void			*malloc(size_t size)
 	ret = find_zone(type, size);
 	return (ret);
 }
-
+/*
 void			*calloc(size_t count, size_t size)
 {
 	void		*ret;
@@ -179,41 +176,57 @@ void			*reallocf(void *ptr, size_t size)
 
 	ret = realloc(ptr, size);
 	if (ret != ptr)
-		free (ptr);
+		free(ptr);
+	return (ret);
 }
 
-void			upsize(void)
-		
-		
-		
+t_block			*get_list(void *ptr)
+{
+	t_block		*ret;
+	char		*cast;
+
+	cast = ptr;	
+	cast -= g_wall.block_size;
+	ret = (t_block *)cast;
+	return (ret);
+}
+
+void			*upsize(t_block *current, size_t size)
+{
+	t_block		*next;
+
+	next = current->next;
+	current->size = size;
+	current->next = block_it(current + size, next->size + current->size, NULL);
+	current->next->next = next->next;
+	return (current->ptr);
+}
 
 void			*realloc(void *ptr, size_t size)
 {
-	void		*ret;
-	char		*cast;
+	t_block		*current;
 	t_block		*next;
-
+		
 	if (ptr == NULL)
 		return (malloc(size));
-	if (!check(p))
+	if (!check(ptr, NULL))
 		return (NULL);
 	if (size == 0)
 	{
 		free(ptr);
 		return (find_zone(0, 0));
 	}
-	cast = ptr;
-	cast -= g_wall.block_size;
-	next = (t_block *)cast->next;
-	if (next && next->freed == 1 && next->size + cast->size <= size)
+	current = get_list(ptr);
+	if ((size_t)current->size == size)
+		return (ptr);
+	else if ((size_t)current->size < size)
 	{
-		cast->size = size;
-		cast->next = block_it(cast + size, next->size + cast->size, map);
-		cast->next->next = next->next;
-		return (cast);
+		next = current->next;
+		downsize(current, size, NULL);
+		current->next->next = next->next;
+		return (current->ptr);
 	}
-	ret = malloc(size);
-	ft_memcpy(ret, ptr, ptr->size);
-	free(ptr);
-	return (ret);
+	else
+		return (upsize(current, size));
 }
+*/

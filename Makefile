@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2016/11/30 07:08:03 by takiapo          ###   ########.fr        #
+#*   Updated: 2016/12/01 10:03:43 by takiapo          ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ $(LIBFT)  : libft/libft.a
 
 $(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
 	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -o $@  -c $^ -g
+	$(CC) $(WFLAGS) -o $@  -c $^ -g -fPIC
 
 clean :
 	echo 'clean'
