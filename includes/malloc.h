@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 14:12:43 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/05 09:29:07 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/06 16:24:32 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ void		*malloc(size_t size);
 void		*calloc(size_t , size_t);
 int			check(t_block *p, t_map **country);
 void		ft_print_memory(void *addr);
+void show_alloc_mem(void);
 #endif

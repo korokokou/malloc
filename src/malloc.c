@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/06 07:38:21 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/06 19:09:17 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void			*block_it(void *ret, int size, t_map *map)
 	return (ret);
 }
 
+
+static int ncount = 0;
+static int ntotal = 0;
 void			map_it(void *new, int type, int size)
 {
 	t_map		data;
@@ -39,6 +42,7 @@ void			map_it(void *new, int type, int size)
 	data.next = NULL;
 	data.left = 0;
 	data.region = NULL;
+	data.prev = NULL;
 	cast = new;
 	ft_bzero(new, g_wall.map_size);
 	ft_memcpy(new, (void *)(&data), g_wall.map_size);
@@ -59,21 +63,20 @@ void			*initialize(unsigned int type)
 		zone_size = type;
 	new = mmap(NULL, zone_size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,
 			-1, 0);
-	if (!new)
-		ft_putendl("mmap bug");
-	char *tmp = new;
-	int i = 0;
-	while (i < zone_size)
-	{
-		tmp[i] = i;
-		i++;
-	}
 	if (new == (void *)-1)
 		return (NULL);
 	if (type > 1)
 		type = 3;
 	map_it(new, type, zone_size);
-	((t_map *)new)->end = &(tmp[i - 1]);
+	ft_putstr("map ");
+	ft_putstr(" type: ");
+	ft_putnbr(type);
+	ft_putstr(" size: ");
+	ft_putnbr(zone_size);
+	ft_putchar('\n');
+	show_alloc_mem();
+	ncount++;
+	ntotal += zone_size;
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
 	else
@@ -81,6 +84,7 @@ void			*initialize(unsigned int type)
 		temp = g_wall.countries;
 		while (temp->next)
 			temp = temp->next;
+		((t_map *)new)->prev = temp;
 	}
 	return (temp->next = new);
 }
@@ -91,17 +95,12 @@ void			*downsize(t_block *current, int size, t_map *map)
 	char		*cast;
 	int			next_size;
 
-//	if (size == 56)
-//		ft_putendl("oh");
 	temp = current;
 	cast = (char *)temp;
 	temp->freed = 0;
 	next_size = current->size - size - g_wall.block_size;
 	temp->size = size - g_wall.block_size;
-/*	ft_putstr("memory: ");	
-	ft_print_memory(cast + size);
-	ft_putchar('\n');
-*/	temp->next = block_it(cast + size, next_size, map);
+	temp->next = block_it(cast + size, next_size, map);
 	return (temp->ptr);
 }
 
@@ -110,33 +109,20 @@ void			*find_place(t_block *list, int size, t_map *map)
 	t_block		*temp;
 
 	temp = list;
-/*	ft_putstr("number of zones: ");
-	ft_putnbr(map->left);
-	ft_putchar('\n');
-	ft_putstr("size left: ");
-	ft_putnbr(map->size);
-	ft_putchar('\n');
-*//*		ft_putstr("freed :");
-		ft_putnbr(temp->freed);
-		ft_putstr("for type :");
-		ft_putnbr(map->type);
-		ft_putchar('\n');
-*/
-		while (temp)
+/*	if (size == 160)
 	{
-/*		ft_putnbr(temp->size);
+		ft_putstr("type ");
+		ft_putnbr(map->type);
+		ft_putstr(" left ");
+		ft_putnbr(map->left);
+		ft_putstr(" size ");
+		ft_putnbr(map->size);
 		ft_putchar('\n');
-		ft_print_memory(temp);
-		if (temp->next)
-		{
-			ft_putstr("   to   ");
-			ft_print_memory(temp->next);
-		}
-		ft_putchar('\n');
-*/
+	}	
+*/	while (temp)
+	{
 		if (temp->freed && temp->size - size  + 32 == 0)
 		{
-//			ft_putendl("so it seems");
 			temp->freed = 0;
 			return (temp->ptr);
 		}
@@ -154,12 +140,21 @@ char			*find_zone(int type, int size)
 
 	temp = g_wall.countries;
 	ret = NULL;
+//	int i = 0;
 	while (temp)
 	{
-		if (temp->type == type)// && temp->size =< size)
+	 /*	if (size == 160)
 		{
-//			if (size == 56)
-//				ft_putendl("zone*******************************");
+			i++;
+			ft_putnbr(i);
+			ft_putchar('\n');
+			ft_print_memory(temp);
+			ft_putstr("  to   ");
+			ft_print_memory(temp->next);
+			ft_putchar('\n');
+		}
+	*/	if (temp->type == type)// && temp->size =< size)
+		{
 			if ((ret = find_place(temp->region, size, temp)) != NULL)
 			{
 				temp->left++;
@@ -189,24 +184,24 @@ void			*malloc(size_t size)
 	int			type;
 	void		*ret;
 
+	ft_putendl("in");
 	if (g_wall.page_size == 0)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
-	ft_putendl("in");
-/*	ft_putnbr(size);
-	ft_putchar('\n');
-*/	type = get_type_of_country(size);
+	type = get_type_of_country(size);
 	size += g_wall.block_size;
 	size = ALIGN(size);
 	ret = find_zone(type, size);
-/*	ft_putnbr(size);
-	ft_putchar('\n');
-*/	ft_putendl("out");
-	if (!ret)
+	if (((long)ret & 3))
 	{
-		ft_putendl("oho");
+		ft_putstr("unalligned   ");
+		ft_putnbr(size);
+		ft_putstr("   -    ");
+		ft_print_memory(ret);
+		ft_putchar('\n');
 	}
+	ft_putendl("out");
 	return (ret);
 }
 
@@ -214,12 +209,29 @@ void			*calloc(size_t count, size_t size)
 {
 	void		*ret;
 
-//	ft_putendl("in calloc");
+	ft_putendl("in calloc");
 	ret = malloc(count * size);
+//	ft_putstr("count  ");
+	size *= count;
+	size += g_wall.block_size;
+	size = ALIGN(size);
+	ft_putnbr(size);
+	ft_putchar('\n');
+
+	ft_print_memory(ret);
+	ft_putchar('\n');
+	ft_putstr("count   :");
+	ft_putnbr(ncount);
+	ft_putstr("total   :");
+	ft_putnbr(ntotal);
+	ft_putchar('\n');
 	if (!ret)
+	{
+		ft_putendl("merde");
 		return (NULL);
+	}	
 	ft_bzero(ret, count * size);
-//	ft_putendl("out calloc");
+	ft_putendl("out calloc");
 	return (ret);
 }
 
@@ -227,7 +239,6 @@ void			*reallocf(void *ptr, size_t size)
 {
 	void		*ret;
 
-	ft_putendl("in reallocf");
 	ret = realloc(ptr, size);
 	if (ret != ptr)
 		free(ptr);
@@ -261,7 +272,7 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*current;
 	t_block		*next;
 
-	ft_putendl("in realloc");
+//	ft_putendl("in reaaloc");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
@@ -283,5 +294,4 @@ void			*realloc(void *ptr, size_t size)
 	}
 	else
 		return (upsize(current, size));
-	ft_putendl("out realloc");
 }

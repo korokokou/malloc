@@ -83,7 +83,7 @@ all : $(OBJECTS) $(NAME)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p obj
-	@gcc -c $(FLAGS) -I. -c $< -o $@ -g -fPIC
+	@gcc -c $(FLAGS) -I. -c $< -o $@ -g #-fPIC
 	@echo -n '.'
 
 $(NAME):

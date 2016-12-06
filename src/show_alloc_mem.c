@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/05 09:49:35 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/06 16:29:50 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ void				ft_print_memory(void *addr)
 {
 	long int		p;
 
+	if (addr == NULL)
+	{
+		ft_putstr("(null)");
+		return ;
+	}
 	p = (long int)addr;
 	ft_putstr("0x");
 	ft_putnbr_base(p, 16, "0123456789ABCDEF");
@@ -75,9 +80,20 @@ void				show_alloc_mem(void)
 	while (temp)
 	{
 		truc = temp->region;
+		if (temp->type  == 0)
+			ft_putstr("tiny   ");
+		else if (temp->type == 1)
+			ft_putstr("small  ");
+		else 
+			ft_putstr("large  ");
+	//	ft_putnbr(temp->size);
+	//	ft_putchar('\n');
 		while (truc)
 		{
 			ft_print_memory(truc);
+			ft_putstr("   -   ");
+			ft_print_memory(truc->next);
+			ft_putchar('\n');
 			truc = truc->next;
 		}
 		temp = temp->next;

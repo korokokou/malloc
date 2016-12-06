@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/05 21:01:26 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/06 19:11:41 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,21 @@ int				check(t_block *p, t_map **country)
 	return (0);
 }
 
+void			whole_mmap(t_map *country)
+{
+	ft_putendl("*******************munmap*****************");
+	if (country->prev)
+		country->prev->next = country->next;
+	if (country->next)
+		country->next->prev = country->prev;
+	if (g_wall.countries == country)
+	{
+		munmap(country, country->size);
+		g_wall.countries = country;
+		country->prev = NULL;
+	}
+}
+
 void			free(void *p)
 {
 	t_block		*temp;
@@ -46,9 +61,11 @@ void			free(void *p)
 	cast = p;
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;
-	ft_print_memory(cast);	
-	ft_putchar('\n');
+//	ft_print_memory(cast);	
+//	ft_putchar('\n');
 	temp->freed = 1;
 	country->left--;
+//	if (country->type == 3)
+//		whole_mmap(country);
 	ft_putendl("free out");
 }
