@@ -6,13 +6,13 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/28 22:05:28 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/05 09:49:35 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-extern t_malloc		*g_wall;
+extern t_malloc		g_wall;
 
 static void			ft_putnbr_base(long int n, int div, char *s)
 {
@@ -30,16 +30,15 @@ static void			ft_putnbr_base(long int n, int div, char *s)
 	}
 }
 
-static void			ft_print_memory(void *addr)
+void				ft_print_memory(void *addr)
 {
 	long int		p;
 
 	p = (long int)addr;
-	p %= 268435456;
 	ft_putstr("0x");
 	ft_putnbr_base(p, 16, "0123456789ABCDEF");
 }
-
+/*
 static void			ft_putaddr(char *s, t_block *p)
 {
 	int				sum;
@@ -66,13 +65,21 @@ static void			ft_putaddr(char *s, t_block *p)
 	ft_putnbr_base(sum, 10, "0123456789");
 	ft_putstr(" octects\n");
 }
-
+*/
 void				show_alloc_mem(void)
 {
-	if (g_wall->large)
-		ft_putaddr("TINY : ", g_wall->tiny);
-	if (g_wall->large)
-		ft_putaddr("SMALL : ", g_wall->small);
-	if (g_wall->large)
-		ft_putaddr("LARGE : ", g_wall->large);
+	t_map			*temp;
+	t_block			*truc;
+
+	temp = g_wall.countries;
+	while (temp)
+	{
+		truc = temp->region;
+		while (truc)
+		{
+			ft_print_memory(truc);
+			truc = truc->next;
+		}
+		temp = temp->next;
+	}
 }

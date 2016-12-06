@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#*   Updated: 2016/12/01 10:03:43 by takiapo          ###   ########.fr       *#
+#*   Updated: 2016/12/06 07:38:42 by takiapo          ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,8 @@ LIB = -L libft/ -lft
 
 SRC = 	\
 		malloc.c \
-		free.c
-	#	src/show_alloc_mem.c
+		free.c \
+		show_alloc_mem.c
 
 OBJECTS = $(patsubst %.c, $(OBJDIR)/%.o, $(SRC))
 

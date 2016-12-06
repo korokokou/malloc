@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#    Updated: 2016/11/25 12:03:50 by takiapo          ###   ########.fr        #
+#*   Updated: 2016/12/01 19:58:04 by takiapo          ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ all : $(OBJECTS) $(NAME)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p obj
-	@gcc -c $(FLAGS) -I. -c $< -o $@ -g
+	@gcc -c $(FLAGS) -I. -c $< -o $@ -g -fPIC
 	@echo -n '.'
 
 $(NAME):

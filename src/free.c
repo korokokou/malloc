@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/01 12:23:45 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/05 21:01:26 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,15 @@ void			free(void *p)
 	t_map		*country;
 	char		*cast;
 
+	ft_putstr("free in:    ");
 	if (!check(p, &country))
 		return ;
 	cast = p;
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;
+	ft_print_memory(cast);	
+	ft_putchar('\n');
 	temp->freed = 1;
 	country->left--;
+	ft_putendl("free out");
 }

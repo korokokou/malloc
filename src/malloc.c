@@ -6,17 +6,18 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/01 13:12:37 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/06 07:38:21 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include "../includes/malloc.h"
 
 t_malloc		g_wall = (t_malloc){0, 0, sizeof(t_map), sizeof(t_block)};
 
 void			*block_it(void *ret, int size, t_map *map)
 {
-	t_block			data;
+	t_block		data;
 
 	data.size = size;
 	data.next = NULL;
@@ -30,8 +31,8 @@ void			*block_it(void *ret, int size, t_map *map)
 
 void			map_it(void *new, int type, int size)
 {
-	t_map			data;
-	char			*cast;
+	t_map		data;
+	char		*cast;
 
 	data.type = type;
 	data.size = size;
@@ -46,9 +47,9 @@ void			map_it(void *new, int type, int size)
 
 void			*initialize(unsigned int type)
 {
-	void				*new;
-	t_map				*temp;
-	int					zone_size;
+	void		*new;
+	t_map		*temp;
+	int			zone_size;
 
 	if (type == 0)
 		zone_size = g_wall.page_size << 1;
@@ -58,15 +59,19 @@ void			*initialize(unsigned int type)
 		zone_size = type;
 	new = mmap(NULL, zone_size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,
 			-1, 0);
+	if (!new)
+		ft_putendl("mmap bug");
 	char *tmp = new;
 	int i = 0;
 	while (i < zone_size)
 	{
 		tmp[i] = i;
-			i++;
+		i++;
 	}
 	if (new == (void *)-1)
 		return (NULL);
+	if (type > 1)
+		type = 3;
 	map_it(new, type, zone_size);
 	((t_map *)new)->end = &(tmp[i - 1]);
 	if (!g_wall.countries)
@@ -82,16 +87,21 @@ void			*initialize(unsigned int type)
 
 void			*downsize(t_block *current, int size, t_map *map)
 {
-	t_block			*temp;
-	char			*cast;
-	int				next_size;
+	t_block		*temp;
+	char		*cast;
+	int			next_size;
 
+//	if (size == 56)
+//		ft_putendl("oh");
 	temp = current;
 	cast = (char *)temp;
 	temp->freed = 0;
 	next_size = current->size - size - g_wall.block_size;
 	temp->size = size - g_wall.block_size;
-	temp->next = block_it(cast + size, next_size, map);
+/*	ft_putstr("memory: ");	
+	ft_print_memory(cast + size);
+	ft_putchar('\n');
+*/	temp->next = block_it(cast + size, next_size, map);
 	return (temp->ptr);
 }
 
@@ -100,9 +110,37 @@ void			*find_place(t_block *list, int size, t_map *map)
 	t_block		*temp;
 
 	temp = list;
-	while (temp)
+/*	ft_putstr("number of zones: ");
+	ft_putnbr(map->left);
+	ft_putchar('\n');
+	ft_putstr("size left: ");
+	ft_putnbr(map->size);
+	ft_putchar('\n');
+*//*		ft_putstr("freed :");
+		ft_putnbr(temp->freed);
+		ft_putstr("for type :");
+		ft_putnbr(map->type);
+		ft_putchar('\n');
+*/
+		while (temp)
 	{
-		if (temp->freed && temp->size - size >= 0)
+/*		ft_putnbr(temp->size);
+		ft_putchar('\n');
+		ft_print_memory(temp);
+		if (temp->next)
+		{
+			ft_putstr("   to   ");
+			ft_print_memory(temp->next);
+		}
+		ft_putchar('\n');
+*/
+		if (temp->freed && temp->size - size  + 32 == 0)
+		{
+//			ft_putendl("so it seems");
+			temp->freed = 0;
+			return (temp->ptr);
+		}
+		else if (temp->freed && temp->size - size > 0)
 			return (downsize(temp, size, map));
 		temp = temp->next;
 	}
@@ -118,11 +156,14 @@ char			*find_zone(int type, int size)
 	ret = NULL;
 	while (temp)
 	{
-		if (temp->type == type && temp->left < size)
+		if (temp->type == type)// && temp->size =< size)
 		{
+//			if (size == 56)
+//				ft_putendl("zone*******************************");
 			if ((ret = find_place(temp->region, size, temp)) != NULL)
 			{
 				temp->left++;
+				temp->size -= size;
 				return ((char *)ret);
 			}
 		}
@@ -152,21 +193,33 @@ void			*malloc(size_t size)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
-	type = get_type_of_country(size);
+	ft_putendl("in");
+/*	ft_putnbr(size);
+	ft_putchar('\n');
+*/	type = get_type_of_country(size);
 	size += g_wall.block_size;
 	size = ALIGN(size);
 	ret = find_zone(type, size);
+/*	ft_putnbr(size);
+	ft_putchar('\n');
+*/	ft_putendl("out");
+	if (!ret)
+	{
+		ft_putendl("oho");
+	}
 	return (ret);
 }
-/*
+
 void			*calloc(size_t count, size_t size)
 {
 	void		*ret;
 
+//	ft_putendl("in calloc");
 	ret = malloc(count * size);
 	if (!ret)
 		return (NULL);
 	ft_bzero(ret, count * size);
+//	ft_putendl("out calloc");
 	return (ret);
 }
 
@@ -174,6 +227,7 @@ void			*reallocf(void *ptr, size_t size)
 {
 	void		*ret;
 
+	ft_putendl("in reallocf");
 	ret = realloc(ptr, size);
 	if (ret != ptr)
 		free(ptr);
@@ -206,7 +260,8 @@ void			*realloc(void *ptr, size_t size)
 {
 	t_block		*current;
 	t_block		*next;
-		
+
+	ft_putendl("in realloc");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
@@ -228,5 +283,5 @@ void			*realloc(void *ptr, size_t size)
 	}
 	else
 		return (upsize(current, size));
+	ft_putendl("out realloc");
 }
-*/
