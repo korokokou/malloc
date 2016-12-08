@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 14:12:43 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/06 16:24:32 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/08 19:06:21 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@
 # include "struct_malloc.h"
 
 # define ABS(x)  ( ( (x) < 0) ? -(x) : (x) )
-# define ALIGN(x) (( ( ( x - 1 ) >> 3) << 3) + 8)
+# define ALIGN(x) ((( ( ( x ) - 1 ) >> 4) << 4) + 16)
+# define FLAG_PROT PROT_READ | PROT_WRITE
+# define FLAG_MAP MAP_ANON | MAP_PRIVATE
 
 void		free(void *p);
 void		*malloc(size_t size);

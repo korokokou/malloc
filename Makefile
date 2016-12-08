@@ -50,7 +50,7 @@ $(LIBFT)  : libft/libft.a
 
 $(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
 	@mkdir -p $(OBJDIR)
-	$(CC) $(WFLAGS) -o $@  -c $^ -g #-fPIC
+	$(CC) $(WFLAGS) -o $@  -c $^ -g -fPIC
 
 clean :
 	echo 'clean'

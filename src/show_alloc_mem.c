@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/07 19:29:45 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/08 17:30:39 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,27 @@ void				show_alloc_mem(void)
 		total = 0;
 		while (truc)
 		{
-			z++;
-			total += truc->size;
 			ft_print_memory(truc);
 			ft_putstr("   -   ");
 			ft_print_memory(truc->next);
 			ft_putstr("   ");
 			ft_putnbr(truc->size);
+			ft_putstr("  ");
+			if (truc->freed)
+				ft_putendl("freed");
+			else
+				ft_putendl("useeeeeeeeeed");
 			ft_putchar('\n');
+			z++;
+			total += truc->size;
 			truc = truc->next;
+			if (temp == temp->next)
+				ft_putendl("merdE");
 		}
 		ft_putstr("nombre de zones = ");
 		ft_putnbr(z);
+		ft_putstr("  et ");
+		ft_putnbr(temp->left);
 		ft_putchar('\n');
 		ft_putstr(" pour une taille de metadonnees de ");
 		ft_putnbr(z * g_wall.block_size + g_wall.map_size);
@@ -116,10 +125,7 @@ void				show_alloc_mem(void)
 		ft_putnbr(total);
 		ft_putchar('\n');
 		ft_putstr(" ce qui donne un tout de ");
-		ft_putnbr(z * 32 + 30 + total);
-			ft_putchar('\n');
-		ft_putstr(" et donc ");
-		ft_putnbr(z * 32 + 30 + total + temp->size);
+		ft_putnbr(z * g_wall.block_size + g_wall.map_size + total);
 			ft_putchar('\n');
 		temp = temp->next;
 	}
