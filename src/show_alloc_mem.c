@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/08 17:30:39 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/13 19:30:36 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,21 @@ void				show_alloc_mem(void)
 			ft_putstr("   ");
 			ft_putnbr(truc->size);
 			ft_putstr("  ");
+			if (truc->next != NULL)
+			{
+				ft_putnbr((long int)truc->next - (long int)truc - 32);
+			}
+			ft_putstr("  ");
 			if (truc->freed)
 				ft_putendl("freed");
 			else
 				ft_putendl("useeeeeeeeeed");
-			ft_putchar('\n');
+			ft_putstr("  ");
 			z++;
 			total += truc->size;
 			truc = truc->next;
 			if (temp == temp->next)
-				ft_putendl("merdE");
+				ft_putendl("merde");
 		}
 		ft_putstr("nombre de zones = ");
 		ft_putnbr(z);

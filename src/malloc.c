@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/08 20:30:07 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/13 19:27:48 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void			*block_it(void *ret, int size, t_block *next)
 	cast = ret;
 	data.ptr = cast + g_wall.block_size;
 	ft_bzero(ret, g_wall.block_size);
+	ft_putendl("********************************");
+	show_alloc_mem();
 	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
@@ -229,6 +231,7 @@ void			*upsize(t_block *current, size_t size)
 	void		*ret;
 
 	next = current->next;
+	current->data[0] = 2;
 	if (next && next->freed == 0)
 	{
 		current->size = size + next->size;
