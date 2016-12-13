@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/08 20:30:07 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/13 09:33:38 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,38 @@ void			*block_it(void *ret, int size, t_block *next)
 	data.freed = 1;
 	cast = ret;
 	data.ptr = cast + g_wall.block_size;
+	/* Debug */
+	t_map *temp = NULL;
+	if (!check(ret, &temp)){
+		ft_putendl("seem we found something");
+		ft_print_memory(ret);
+		ft_putchar('\n');
+	}
+	else
+	{
+		temp = g_wall.countries;
+			ft_putendl("in");
+		while (temp)
+		{	
+			ft_print_memory(temp);
+			ft_putchar('\n');
+			temp = temp->next;
+		}
+	}
+	if (temp)
+	{
+	ft_putendl("map actuelle");
+	ft_putstr("type  :");
+	ft_putnbr(temp->type);
+	ft_putstr("   ");
+	ft_print_memory(temp);
+	ft_putchar('\n');
+	ft_print_memory(cast);
+	ft_putchar('\n');
+	ft_print_memory(cast + size);
+	ft_putchar('\n');
 	ft_bzero(ret, g_wall.block_size);
+	}
 	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
