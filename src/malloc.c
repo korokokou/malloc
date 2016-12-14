@@ -6,14 +6,14 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/13 19:27:48 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/14 17:04:41 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "../includes/malloc.h"
 
-t_malloc		g_wall = (t_malloc){0, 0, sizeof(t_map), sizeof(t_block)};
+t_malloc		g_wall = (t_malloc){0, 0, ALIGN(sizeof(t_map)), ALIGN(sizeof(t_block))};
 
 void			*block_it(void *ret, int size, t_block *next)
 {
@@ -28,8 +28,12 @@ void			*block_it(void *ret, int size, t_block *next)
 	cast = ret;
 	data.ptr = cast + g_wall.block_size;
 	ft_bzero(ret, g_wall.block_size);
-	ft_putendl("********************************");
-	show_alloc_mem();
+/*	ft_putendl("********************************");
+	ft_print_memory(ret);
+	ft_putchar('\n');
+	ft_print_memory(data.next);
+	ft_putchar('\n');
+*/
 	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
 	return (ret);
 }
@@ -51,6 +55,7 @@ void			map_it(void *new, int type, int size)
 	ft_memcpy(new, (void *)(&data), g_wall.map_size);
 	((t_map *)new)->region = block_it(cast + g_wall.map_size, size, NULL);
 }
+
 
 void			*initialize(unsigned int type)
 {
@@ -163,16 +168,24 @@ int				get_type_of_country(int size)
 		return (size + g_wall.map_size + g_wall.block_size + 1);
 }
 
-void			check_align( void *ret, int size)
+int			check_align( void *ret, int size)
 {
-	if (((long)ret & 7) || !check(ret, NULL) )
+	if (((unsigned long)ret & 15) || !check(ret, NULL) )
 	{
+		ft_putendl("*************************************************");
 		ft_putstr("unalligned   ");
 		ft_putnbr(size);
 		ft_putstr("   -    ");
 		ft_print_memory(ret);
 		ft_putchar('\n');
+		ft_putnbr(g_wall.map_size);
+		ft_putchar('\n');
+		show_alloc_mem();
+		//exit(-1);
+		return (0);
 	}
+	(void)size;
+	return (1);
 }
 
 void			*malloc(size_t size)
@@ -231,19 +244,20 @@ void			*upsize(t_block *current, size_t size)
 	void		*ret;
 
 	next = current->next;
-	current->data[0] = 2;
 	if (next && next->freed == 0)
 	{
-		current->size = size + next->size;
-		current->next = next->next;
-		ret = downsize(current, size);
+		if (current->size + next->size + 32 > (int)size)
+		{
+			current->size += next->size;
+			current->next = next->next;
+			ret = downsize(current, size);
+			if (ret != NULL)
+				return (ret);
+		}
 	}
-	else
-	{
-		ret = malloc(size);
-		ft_memcpy(ret, current->ptr, size);
-		free(current->ptr);
-	}
+	ret = malloc(size);
+	ft_memcpy(ret, current->ptr, current->size);
+	free(current->ptr);
 	return (ret);
 }
 
@@ -269,6 +283,7 @@ void			*realloc(void *ptr, size_t size)
 		ret = downsize(current, size);
 	else
 		ret = upsize(current, size);
-	check_align(ret, size);
+	if (!check_align(ret, size))
+		ft_putendl("realloc");
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/08 20:30:33 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/14 16:28:06 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void			large_munmap(t_map *country)
 	{
 		g_wall.countries = country->next;
 		g_wall.countries->prev = NULL;
-		munmap(country, country->size);
 	}
+		munmap(country, country->size);
 }
 
 void			other_munmap(t_map *country)
@@ -74,7 +74,7 @@ void			coalesce(t_map *country)
 	{
 		if (temp->freed == 1)
 		{
-			next = temp;
+			next = temp->next;
 			while (next && next->freed == 1)
 			{
 				temp->size += next->size;
@@ -85,6 +85,21 @@ void			coalesce(t_map *country)
 		}
 		temp = temp->next;
 	}
+}
+
+void			check_free(t_map *country)
+{
+	t_block		*temp;
+
+	temp = country->region;
+	while (temp)
+	{
+		if (temp->freed == 0)
+			break;
+		temp = temp->next;
+	}
+	if (temp == NULL)	
+		large_munmap(country);
 }
 
 void			free(void *p)
@@ -100,9 +115,9 @@ void			free(void *p)
 	temp = (t_block *)cast;
 	temp->freed = 1;
 	country->left--;
-//	coalesce(country);
+	coalesce(country);
 	if (country->left <= 0)
 		other_munmap(country);
-	if (country->type == 3)
+	else if (country->type == 3)
 		large_munmap(country);
 }
