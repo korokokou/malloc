@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 13:51:59 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 17:13:50 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,31 @@ int				get_type_of_country(int size)
 		return (size + MAP_SIZE + BLOCK_SIZE);
 }
 
+int             check_align( void *ret, int size)
+{
+	if (((unsigned long)ret & 15) || !check(ret, NULL) )
+	{
+		ft_putendl("*************************************************");
+		ft_putstr("unalligned   ");
+		ft_putnbr(size);
+		ft_putstr("   -    ");
+		ft_print_memory(ret);
+		ft_putchar('\n');
+		ft_putnbr(g_wall.map_size);
+		ft_putchar('\n');
+		show_alloc_mem();
+		//exit(-1);
+		return (0);
+	}
+	(void)size;
+	return (1);
+}
 void			*malloc(size_t size)
 {
 	int			type;
 	void		*ret;
 
+	ft_putendl("in");
 	if (g_wall.page_size == 0)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
@@ -115,5 +135,14 @@ void			*malloc(size_t size)
 	ret = find_zone(type, size);
 	if (ret == NULL)
 		ft_putendl("hum");
+	check_align(ret, size);
+		ft_putendl("*************************************************");
+/*	show_alloc_mem();
+	ft_print_memory(ret);
+	ft_putstr("   ");
+	ft_putnbr(size);
+	ft_putchar('\n');
+*/
+	check(ret, NULL);
 	return (ret);
 }

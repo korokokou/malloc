@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 11:33:13 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 17:06:38 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ extern t_malloc	g_wall;
 int				check(t_block *p, t_map **country)
 {
 	t_map		*temp;
+	t_block		*b_temp;
+	t_block		*cast;
 
 	if (!p)
 		return (0);
@@ -25,6 +27,16 @@ int				check(t_block *p, t_map **country)
 	{
 		if (p >= temp->region && p <= temp->region + temp->size)
 		{
+			b_temp = temp->region;
+			cast = get_list(p);
+			while (b_temp)
+			{
+				if (b_temp == cast)
+					break;
+				b_temp = b_temp->next;
+			}
+			if (b_temp == NULL)
+				ft_putendl("NULL");
 			if (country)
 				*country = temp;
 			return (1);

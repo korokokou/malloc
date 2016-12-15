@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 14:12:43 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 11:57:55 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 17:06:56 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void		*calloc(size_t , size_t);
 void		*realloc(void *, size_t);
 void		free(void *p);
 
+t_block		*get_list(void *ptr);
 void		show_alloc_mem(void);
 
 void		*block_it(void *, int, t_block *);
@@ -41,4 +42,5 @@ void		map_it(void *, int, int);
 char		*find_zone (int, int);
 int			check(t_block *p, t_map **country);
 void		*downsize(t_block *current, int size);
+
 #endif
