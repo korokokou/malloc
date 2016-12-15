@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 09:29:37 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 12:01:02 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,6 @@
 
 extern t_malloc		g_wall;
 
-static void			ft_putnbr_base(long int n, int div, char *s)
-{
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n = -n;
-	}
-	if (n < div)
-		write(1, &s[n], 1);
-	else
-	{
-		ft_putnbr_base(n / div, div, s);
-		ft_putnbr_base(n % div, div, s);
-	}
-}
-
-void				ft_print_memory(void *addr)
-{
-	long int		p;
-
-	if (addr == NULL)
-	{
-		ft_putstr("(null)");
-		return ;
-	}
-	p = (long int)addr;
-	ft_putstr("0x");
-	ft_putnbr_base(p, 16, "0123456789ABCDEF");
-}
 /*
 static void			ft_putaddr(char *s, t_block *p)
 {

@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 14:12:43 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 10:35:48 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 11:57:55 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,20 @@
 # define ALIGN(x) ((( ( ( x ) - 1 ) >> 4) << 4) + 16)
 # define FLAG_PROT PROT_READ | PROT_WRITE
 # define FLAG_MAP MAP_ANON | MAP_PRIVATE
+# define MAP_SIZE ALIGN(sizeof(t_map))
+# define BLOCK_SIZE ALIGN(sizeof(t_block))
 
-void		free(void *p);
 void		*malloc(size_t size);
 void		*calloc(size_t , size_t);
+void		*realloc(void *, size_t);
+void		free(void *p);
+
+void		show_alloc_mem(void);
+
+void		*block_it(void *, int, t_block *);
+void		map_it(void *, int, int);
+
+char		*find_zone (int, int);
 int			check(t_block *p, t_map **country);
-void		ft_print_memory(void *addr);
-void show_alloc_mem(void);
+void		*downsize(t_block *current, int size);
 #endif

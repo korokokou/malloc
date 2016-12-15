@@ -6,14 +6,16 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/29 23:35:35 by takiapo           #+#    #+#             */
-/*   Updated: 2014/04/18 18:51:21 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 12:14:30 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <unistd.h>
 # include <string.h>
 # include "structs.h"
+
 t_list	*ft_lstnew(void const *content, size_t content_size);
 char	**ft_strsplit(char const *s, char c);
 char	*ft_strtrim(char const *s);
@@ -68,4 +70,6 @@ int		ft_isprint(int c);
 char	*ft_strncpy(char *s1, const char *s2, size_t n);
 char	*ft_strcpy(char *s1, const char *s2);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
+void	ft_print_memory(void *addr);
+void	ft_putnbr_base(long, int, char *);
 #endif

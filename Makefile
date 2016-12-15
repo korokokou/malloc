@@ -29,9 +29,12 @@ OBJDIR = obj
 LIB = -L libft/ -lft
 
 SRC = 	\
-		malloc.c \
 		free.c \
-		show_alloc_mem.c
+		malloc.c \
+		calloc.c \
+		realloc.c \
+		show_alloc_mem.c \
+		struct_management.c 
 
 OBJECTS = $(patsubst %.c, $(OBJDIR)/%.o, $(SRC))
 
@@ -50,7 +53,7 @@ $(LIBFT)  : libft/libft.a
 
 $(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
 	@mkdir -p $(OBJDIR)
-	$(CC) $(WFLAGS) -o $@  -c $^ -g -fPIC
+	$(CC) $(WFLAGS) -o $@  -c $^  $(INCLUDE) -g -fPIC
 
 clean :
 	echo 'clean'

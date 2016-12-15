@@ -6,56 +6,13 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 09:53:29 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 13:51:59 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../includes/malloc.h"
+#include "malloc.h"
 
-t_malloc		g_wall = (t_malloc){0, 0, ALIGN(sizeof(t_map)), ALIGN(sizeof(t_block))};
-
-void			*block_it(void *ret, int size, t_block *next)
-{
-	t_block		data;
-	char		*cast;
-
-	data.size = size - g_wall.block_size;
-	if (data.size < 0)
-		return (NULL);
-	data.next = next;
-	data.freed = 1;
-	cast = ret;
-	data.ptr = cast + g_wall.block_size;
-	ft_bzero(ret, g_wall.block_size);
-/*	ft_putendl("********************************");
-	ft_print_memory(ret);
-	ft_putchar('\n');
-	ft_print_memory(data.next);
-	ft_putchar('\n');
-*/
-	ret = ft_memcpy(ret, (void *)(&data), g_wall.block_size);
-	return (ret);
-}
-
-void			map_it(void *new, int type, int size)
-{
-	t_map		data;
-	char		*cast;
-
-	data.type = type;
-	data.size = size;
-	data.next = NULL;
-	data.left = 0;
-	data.region = NULL;
-	data.prev = NULL;
-	cast = new;
-	size -= g_wall.map_size;
-	ft_bzero(new, g_wall.map_size);
-	ft_memcpy(new, (void *)(&data), g_wall.map_size);
-	((t_map *)new)->region = block_it(cast + g_wall.map_size, size, NULL);
-}
-
+t_malloc		g_wall = (t_malloc){0, 0, MAP_SIZE, BLOCK_SIZE};
 
 void			*initialize(unsigned int type)
 {
@@ -74,8 +31,6 @@ void			*initialize(unsigned int type)
 		return (NULL);	
 	if (type > 1)
 		type = 3;
-	char *buf = (char *)new;
-	((t_map*)new)->end = (t_map *)&(buf[zone_size]);
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
@@ -87,30 +42,6 @@ void			*initialize(unsigned int type)
 		((t_map *)new)->prev = temp;
 	}
 	return (temp->next = new);
-}
-
-void			*downsize(t_block *current, int size)
-{
-	t_block		*temp;
-	t_block		*next;
-
-	char		*cast;
-	int			next_size;
-
-	temp = current;
-	cast = (char *)temp->ptr;
-	next = temp->next;
-	temp->freed = 0;
-	next_size = temp->size - size;
-	temp->size = size;
-	temp->next = block_it(cast + size, next_size, next);
-	if (temp->next == NULL)
-	{
-		if (next)
-			temp->next = next;
-		temp->size += next_size;
-	}
-	return (temp->ptr);
 }
 
 void			*find_place(t_block *list, int size)
@@ -167,132 +98,22 @@ int				get_type_of_country(int size)
 	else if (size <= 1024)
 		return (1);
 	else
-		return (size + g_wall.map_size + g_wall.block_size + 1);
-}
-
-int			check_align( void *ret, int size)
-{
-	if (((unsigned long)ret & 15) || !check(ret, NULL) )
-	{
-		ft_putendl("*************************************************");
-		ft_putstr("unalligned   ");
-		ft_putnbr(size);
-		ft_putstr("   -    ");
-		ft_print_memory(ret);
-		ft_putchar('\n');
-		ft_putnbr(g_wall.map_size);
-		ft_putchar('\n');
-		show_alloc_mem();
-		//exit(-1);
-		return (0);
-	}
-	(void)size;
-	return (1);
+		return (size + MAP_SIZE + BLOCK_SIZE);
 }
 
 void			*malloc(size_t size)
 {
 	int			type;
 	void		*ret;
-	
-	ft_putendl("in");
+
 	if (g_wall.page_size == 0)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
+	size = ALIGN(size);
 	type = get_type_of_country(size);
-	size = ALIGN(size);
 	ret = find_zone(type, size);
-	check_align(ret, size);
-	ft_putendl("night");
-	return (ret);
-}
-
-void			*calloc(size_t count, size_t size)
-{
-	void		*ret;
-
-	ft_putendl("calloc in");
-	ret = malloc(count * size);
-	if (!ret)
-		return (NULL);
-	size *= count;
-	size = ALIGN(size);
-	ft_bzero(ret, size);
-	ft_putendl("calloc out");
-	show_alloc_mem();
-	return (ret);
-}
-
-void			*reallocf(void *ptr, size_t size)
-{
-	void		*ret;
-
-	ret = realloc(ptr, size);
-	if (ret != ptr)
-		free(ptr);
-	return (ret);
-}
-
-t_block			*get_list(void *ptr)
-{
-	t_block		*ret;
-	char		*cast;
-
-	cast = ptr;	
-	cast -= g_wall.block_size;
-	ret = (t_block *)cast;
-	return (ret);
-}
-
-void			*upsize(t_block *current, size_t size)
-{
-	t_block		*next;
-	void		*ret;
-
-	next = current->next;
-	if (next && next->freed == 0)
-	{
-		if (current->size + next->size + 32 > (int)size)
-		{
-			current->size += next->size;
-			current->next = next->next;
-			ret = downsize(current, size);
-			if (ret != NULL)
-				return (ret);
-		}
-	}
-	ret = malloc(size);
-	ft_memcpy(ret, current->ptr, current->size);
-	free(current->ptr);
-	return (ret);
-}
-
-void			*realloc(void *ptr, size_t size)
-{
-	t_block		*current;
-	void		*ret;
-
-	ft_putendl("realloc in");
-	if (ptr == NULL)
-		return (malloc(size));
-	if (!check(ptr, NULL))
-		return (NULL);
-	if (size == 0)
-	{
-		free(ptr);
-		return (find_zone(0, 0));
-	}
-	current = get_list(ptr);
-	size = ALIGN(size);
-	if ((size_t)current->size == size)
-		return (ptr);
-	else if ((size_t)current->size > size)
-		ret = downsize(current, size);
-	else
-		ret = upsize(current, size);
-	if (!check_align(ret, size))
-		ft_putendl("realloc");
-	ft_putendl("realloc out");
+	if (ret == NULL)
+		ft_putendl("hum");
 	return (ret);
 }

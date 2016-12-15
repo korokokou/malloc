@@ -73,17 +73,19 @@ SRC = 	src/ft_atoi.c\
 		src/ft_putnbr.c\
 		src/ft_putnbr_fd.c\
 		src/ft_strsplit.c\
+		src/ft_print_memory.c\
+		src/ft_putnbr_base.c\
 		src/ft_lstnew.c
 
 OBJECTS = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-INCLUDE = includes/libft.h
+INCLUDE = includes/
 
 all : $(OBJECTS) $(NAME)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	@mkdir -p obj
-	@gcc -c $(FLAGS) -I. -c $< -o $@ -g #-fPIC
+	@gcc -c $(FLAGS) -I. -I$(INCLUDE) -c $< -o $@ -g -fPIC
 	@echo -n '.'
 
 $(NAME):
