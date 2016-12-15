@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/28 22:06:33 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/08 18:44:22 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 09:50:02 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct		s_map
 	int				left;
 	struct s_map	*next;
 	struct s_map	*prev;
+	struct s_map	*end;
 }					t_map;
 
 typedef struct		s_malloc

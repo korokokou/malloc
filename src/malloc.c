@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/14 17:04:41 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 09:53:29 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void			*initialize(unsigned int type)
 		return (NULL);	
 	if (type > 1)
 		type = 3;
+	char *buf = (char *)new;
+	((t_map*)new)->end = (t_map *)&(buf[zone_size]);
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
@@ -192,7 +194,8 @@ void			*malloc(size_t size)
 {
 	int			type;
 	void		*ret;
-
+	
+	ft_putendl("in");
 	if (g_wall.page_size == 0)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
@@ -201,6 +204,7 @@ void			*malloc(size_t size)
 	size = ALIGN(size);
 	ret = find_zone(type, size);
 	check_align(ret, size);
+	ft_putendl("night");
 	return (ret);
 }
 
@@ -208,12 +212,15 @@ void			*calloc(size_t count, size_t size)
 {
 	void		*ret;
 
+	ft_putendl("calloc in");
 	ret = malloc(count * size);
 	if (!ret)
 		return (NULL);
 	size *= count;
 	size = ALIGN(size);
 	ft_bzero(ret, size);
+	ft_putendl("calloc out");
+	show_alloc_mem();
 	return (ret);
 }
 
@@ -266,6 +273,7 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*current;
 	void		*ret;
 
+	ft_putendl("realloc in");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
@@ -285,5 +293,6 @@ void			*realloc(void *ptr, size_t size)
 		ret = upsize(current, size);
 	if (!check_align(ret, size))
 		ft_putendl("realloc");
+	ft_putendl("realloc out");
 	return (ret);
 }

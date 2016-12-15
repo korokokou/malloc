@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 12:23:38 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/13 19:30:36 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/15 09:29:37 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,11 @@ void				show_alloc_mem(void)
 		ft_putstr(" ce qui donne un tout de ");
 		ft_putnbr(z * g_wall.block_size + g_wall.map_size + total);
 			ft_putchar('\n');
+		ft_putstr("la zone doit finir a l'adresse ");
+		ft_print_memory((char *) temp + temp->size);
+		ft_putstr("  ");
+		ft_print_memory(temp->end);
+		ft_putchar('\n');
 		temp = temp->next;
 	}
 	ft_putstr(" nombres de zones de type 1: ");
