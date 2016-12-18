@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/18 13:17:10 by                  ###   ########.fr       */
+/*   Updated: 2016/12/18 18:10:58 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ void			large_munmap(t_map *country)
 			country->prev->next = country->next;
 		if (country->next)
 			country->next->prev = country->prev;
-		if (g_wall.countries && g_wall.countries == country)
+		if (g_wall.countries != NULL
+			&& g_wall.countries == country
+			&& g_wall.countries->next != NULL)
 		{
 			g_wall.countries = country->next;
 			g_wall.countries->prev = NULL;
@@ -63,6 +65,7 @@ void			large_munmap(t_map *country)
 		munmap(country, country->size);
 	}
 }
+
 void			coalesce(t_map *country)
 {
 	t_block		*temp;
@@ -90,15 +93,18 @@ void			check_free(t_map *country)
 {
 	t_block		*temp;
 
-	temp = country->region;
-	while (temp)
+	if (country) 
 	{
-		if (temp->freed == 0)
-			break ;
-		temp = temp->next;
+		temp = country->region;
+		while (temp)
+		{
+			if (temp->freed == 0)
+				break ;
+			temp = temp->next;
+		}
+		if (temp == NULL)
+			large_munmap(country);
 	}
-	if (temp == NULL)
-		large_munmap(country);
 }
 
 void			free(void *p)
@@ -117,6 +123,9 @@ void			free(void *p)
 	temp = (t_block *)cast;
 	temp->freed = 1;
 	country->left--;
+	ft_putendl("coalesce");
 	coalesce(country);
+	ft_putendl("check_free");
 	check_free(country);
+	ft_putendl("out");
 }
