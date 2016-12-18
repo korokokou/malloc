@@ -6,13 +6,14 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 17:06:38 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/18 13:17:10 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
 extern t_malloc	g_wall;
+extern int	count;
 
 int				check(t_block *p, t_map **country)
 {
@@ -48,18 +49,20 @@ int				check(t_block *p, t_map **country)
 
 void			large_munmap(t_map *country)
 {
-	if (country->prev)
-		country->prev->next = country->next;
-	if (country->next)
-		country->next->prev = country->prev;
-	if (g_wall.countries == country)
+	if (country)
 	{
-		g_wall.countries = country->next;
-		g_wall.countries->prev = NULL;
+		if (country->prev)
+			country->prev->next = country->next;
+		if (country->next)
+			country->next->prev = country->prev;
+		if (g_wall.countries && g_wall.countries == country)
+		{
+			g_wall.countries = country->next;
+			g_wall.countries->prev = NULL;
+		}
+		munmap(country, country->size);
 	}
-	munmap(country, country->size);
 }
-
 void			coalesce(t_map *country)
 {
 	t_block		*temp;
@@ -106,6 +109,9 @@ void			free(void *p)
 
 	if (!check(p, &country))
 		return ;
+	count--;
+	ft_putnbr(count);
+	ft_putchar ('\n');
 	cast = p;
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;

@@ -6,13 +6,14 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 17:13:50 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/18 13:17:40 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
 t_malloc		g_wall = (t_malloc){0, 0, MAP_SIZE, BLOCK_SIZE};
+int count = 0;
 
 void			*initialize(unsigned int type)
 {
@@ -144,5 +145,6 @@ void			*malloc(size_t size)
 	ft_putchar('\n');
 */
 	check(ret, NULL);
+	count++;
 	return (ret);
 }
