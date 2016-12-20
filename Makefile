@@ -6,7 +6,7 @@
 #    By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2013/11/20 21:45:12 by takiapo           #+#    #+#              #
-#*   Updated: 2016/12/06 07:38:42 by takiapo          ###   ########.fr       *#
+#*   Updated: 2016/12/19 09:19:01 by                  ###   ########.fr       *#
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ all : $(NAME)
 
 $(NAME) : $(LIBFT) $(OBJECTS)
 	make -C libft/
-	$(CC) -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) -g 
+	$(CC) -g -o  $(NAME) $(OBJECTS) $(LIBFLAG) $(WFLAGS) $(INCLUDE) $(LIB) 
 	ln -fs $(NAME) libft_malloc.so
 
 $(LIBFT)  : libft/libft.a
@@ -53,7 +53,7 @@ $(LIBFT)  : libft/libft.a
 
 $(OBJDIR)/%.o : $(addprefix $(SRCDIR), %.c)
 	@mkdir -p $(OBJDIR)
-	$(CC) $(WFLAGS) -o $@  -c $^  $(INCLUDE) -g -fPIC
+	$(CC) -g $(WFLAGS) -o $@  -c $^  $(INCLUDE) -fPIC
 
 clean :
 	echo 'clean'

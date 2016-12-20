@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 17:14:48 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/20 09:56:37 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*current;
 	void		*ret;
 
-	ft_putendl("realloc");
+//	ft_putendl("realloc");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
@@ -76,31 +76,22 @@ void			*realloc(void *ptr, size_t size)
 	}
 	current = get_list(ptr);
 	size = ALIGN(size);
-		ft_print_memory(current);
-		ft_putchar('\n');
-	if ((size_t)current->size == size)
+//		ft_print_memory(current);
+//		ft_putchar('\n');
+	if ((size_t)current->size < size)
+		ret = upsize(current, size);
+	else if ((size_t)current->size > size + 32)
 	{
-		ft_putendl("egalite");
-		return (ptr);
-	}
-	else if ((size_t)current->size > size)
-	{
-/*		ft_putstr("downsize   ");
-		ft_putnbr(current->size);
-		ft_putstr("   ");
-		ft_putnbr(size);
-		ft_putchar('\n');
-		show_alloc_mem();
-*/	
 		ret = downsize(current, size);
-		ft_print_memory(current);
+/*		ft_print_memory(current);
 		ft_putstr("  ");
 		ft_print_memory(ret);
 		ft_putchar('\n');
+*/
 	}
 	else
-		ret = upsize(current, size);
+		ret = ptr;
 	check(ret, NULL);
-	ft_putendl("out");
+//	ft_putendl("out");
 	return (ret);
 }

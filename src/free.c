@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/18 18:10:58 by                  ###   ########.fr       */
+/*   Updated: 2016/12/19 20:35:07 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ void			large_munmap(t_map *country)
 			country->prev->next = country->next;
 		if (country->next)
 			country->next->prev = country->prev;
-		if (g_wall.countries != NULL
-			&& g_wall.countries == country
-			&& g_wall.countries->next != NULL)
+		if (g_wall.countries == country && g_wall.countries->next != NULL)
 		{
 			g_wall.countries = country->next;
 			g_wall.countries->prev = NULL;
@@ -116,16 +114,11 @@ void			free(void *p)
 	if (!check(p, &country))
 		return ;
 	count--;
-	ft_putnbr(count);
-	ft_putchar ('\n');
 	cast = p;
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;
 	temp->freed = 1;
 	country->left--;
-	ft_putendl("coalesce");
 	coalesce(country);
-	ft_putendl("check_free");
-	check_free(country);
-	ft_putendl("out");
+	// check_free(country);
 }

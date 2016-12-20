@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/18 13:17:40 by                  ###   ########.fr       */
+/*   Updated: 2016/12/20 09:58:40 by                  ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void			*initialize(unsigned int type)
 	t_map		*temp;
 	int			zone_size;
 
+	ft_putendl("initialize");
 	if (type == 0)
 		zone_size = g_wall.page_size << 1;
 	else if (type == 1)
@@ -126,7 +127,6 @@ void			*malloc(size_t size)
 	int			type;
 	void		*ret;
 
-	ft_putendl("in");
 	if (g_wall.page_size == 0)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
@@ -137,7 +137,6 @@ void			*malloc(size_t size)
 	if (ret == NULL)
 		ft_putendl("hum");
 	check_align(ret, size);
-		ft_putendl("*************************************************");
 /*	show_alloc_mem();
 	ft_print_memory(ret);
 	ft_putstr("   ");
