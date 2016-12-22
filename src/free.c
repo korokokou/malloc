@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/21 17:51:23 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 07:35:10 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int				check(t_block *p, t_map **country)
 	temp = g_wall.countries;
 	while (temp)
 	{
-		if (p >= temp->region && p <= temp->region + temp->size)
+		if (p >= temp->region && (char *)p + p->size <= (char *)temp->end)
 		{
 			b_temp = temp->region;
 			cast = get_list(p);
@@ -41,7 +41,10 @@ int				check(t_block *p, t_map **country)
 				ft_putendl("NULL");
 				show_alloc_mem();
 				ft_print_memory(cast);
-				ft_putchar('\n');
+				ft_putstr("\n\n");
+				ft_print_memory(temp->end);
+				ft_putstr("\n\n");
+				ft_print_memory(cast);
 				exit(0);
 			}
 			if (country)

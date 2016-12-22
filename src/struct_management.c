@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:45:01 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/21 17:44:36 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 07:36:07 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void			map_it(void *new, int type, int size)
 	data->region = NULL;
 	data->prev = NULL;
 	cast = new;
+	data->end = (t_map *)(cast + size);
 	size -= g_wall.map_size;
 	data->region = block_it(cast + g_wall.map_size, size, NULL);
 }

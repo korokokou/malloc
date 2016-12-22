@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/21 17:47:19 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 08:08:28 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ char			*find_zone(int type, int size)
 		{
 			if ((ret = find_place(temp->region, size)) != NULL)
 			{
-				temp->size -= size;
+				temp->size -= size + g_wall.block_size;
 				return ((char *)ret);
 			}
 		}
@@ -113,7 +113,7 @@ int             check_align( void *ret, int size)
 		ft_putchar('\n');
 		ft_putnbr(g_wall.map_size);
 		ft_putchar('\n');
-		show_alloc_mem();
+//		show_alloc_mem();
 		//exit(-1);
 		return (0);
 	}
@@ -130,6 +130,8 @@ void			*malloc(size_t size)
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
 	size = ALIGN(size);
+	ft_putnbr(size);
+	ft_putchar('\n');
 	type = get_type_of_country(size);
 	ret = find_zone(type, size);
 	if (ret == NULL)
