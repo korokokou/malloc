@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/20 09:58:40 by                  ###   ########.fr       */
+/*   Updated: 2016/12/21 17:47:19 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			*initialize(unsigned int type)
 	t_map		*temp;
 	int			zone_size;
 
-	ft_putendl("initialize");
+//	ft_putendl("initialize");
 	if (type == 0)
 		zone_size = g_wall.page_size << 1;
 	else if (type == 1)
@@ -30,20 +30,19 @@ void			*initialize(unsigned int type)
 		zone_size = type;
 	new = mmap(NULL, zone_size, FLAG_PROT, FLAG_MAP, -1, 0);
 	if (new == (void *)-1)
+	{
+		ft_putendl("memory exausted");
 		return (NULL);	
-	if (type > 1)
-		type = 3;
+	}
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
-	else
-	{
-		temp = g_wall.countries;
-		while (temp->next)
-			temp = temp->next;
-		((t_map *)new)->prev = temp;
-	}
-	return (temp->next = new);
+	temp = g_wall.countries;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
+	temp->next->prev = temp;
+	return (new);
 }
 
 void			*find_place(t_block *list, int size)
@@ -81,7 +80,6 @@ char			*find_zone(int type, int size)
 		{
 			if ((ret = find_place(temp->region, size)) != NULL)
 			{
-				temp->left++;
 				temp->size -= size;
 				return ((char *)ret);
 			}

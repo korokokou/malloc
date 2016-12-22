@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/19 20:35:07 by                  ###   ########.fr       */
+/*   Updated: 2016/12/21 17:51:23 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ int				check(t_block *p, t_map **country)
 				b_temp = b_temp->next;
 			}
 			if (b_temp == NULL)
+			{
 				ft_putendl("NULL");
+				show_alloc_mem();
+				ft_print_memory(cast);
+				ft_putchar('\n');
+				exit(0);
+			}
 			if (country)
 				*country = temp;
 			return (1);
@@ -80,7 +86,6 @@ void			coalesce(t_map *country)
 				temp->size += next->size;
 				temp->next = next->next;
 				next = next->next;
-				country->left--;
 			}
 		}
 		temp = temp->next;
@@ -118,7 +123,6 @@ void			free(void *p)
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;
 	temp->freed = 1;
-	country->left--;
 	coalesce(country);
 	// check_free(country);
 }

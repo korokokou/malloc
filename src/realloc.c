@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/20 09:56:37 by                  ###   ########.fr       */
+/*   Updated: 2016/12/21 17:16:54 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void			*upsize(t_block *current, size_t size)
 	t_block		*next;
 	void		*ret;
 
-	ft_putendl("upsize");
+//	ft_putendl("upsize");
 	next = current->next;
 	if (next && next->freed == 0)
 	{

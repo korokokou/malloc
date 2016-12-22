@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:45:01 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 12:29:27 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/21 17:44:36 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ void			map_it(void *new, int type, int size)
 	t_map		*data;
 	char		*cast;
 
+	if (type > 1)
+		type = 3;
 	data = (t_map *)new;
 	data->type = type;
 	data->size = size;
