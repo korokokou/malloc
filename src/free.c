@@ -6,13 +6,14 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 14:41:13 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 17:45:46 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
 extern t_malloc	g_wall;
+pthread_mutex_t	g_malloc_lock;
 
 void			large_munmap(t_map *country)
 {
@@ -77,6 +78,7 @@ void			free(void *p)
 	t_map		*country;
 	char		*cast;
 
+	pthread_mutex_lock(&g_malloc_lock);
 	if (!check(p, &country))
 		return ;
 	cast = p;
@@ -85,4 +87,5 @@ void			free(void *p)
 	temp->freed = 1;
 	coalesce(country);
 	check_free(country);
+	pthread_mutex_unlock(&g_malloc_lock);	
 }

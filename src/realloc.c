@@ -6,13 +6,14 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 14:40:05 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 17:45:26 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
 extern t_malloc g_wall;
+pthread_mutex_t	g_malloc_lock;
 
 void			*reallocf(void *ptr, size_t size)
 {
@@ -63,6 +64,7 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*current;
 	void		*ret;
 
+	pthread_mutex_lock(&g_malloc_lock);
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
@@ -80,5 +82,6 @@ void			*realloc(void *ptr, size_t size)
 		ret = downsize(current, size);
 	else
 		ret = ptr;
+	pthread_mutex_unlock(&g_malloc_lock);
 	return (ret);
 }

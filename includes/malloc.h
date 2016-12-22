@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 14:12:43 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/15 17:06:56 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 17:47:19 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 # include <string.h>
 # include <stdlib.h>
 # include <sys/mman.h>
-
+# include <pthread.h>
 # include "../libft/includes/libft.h"
 # include "struct_malloc.h"
 
 # define ABS(x)  ( ( (x) < 0) ? -(x) : (x) )
-# define ALIGN(x) ((( ( ( x ) - 1 ) >> 4) << 4) + 16)
+# define ALIGN(x) ((( ( ( x ) - 1 ) >> 3) << 3) + 8)
 # define FLAG_PROT PROT_READ | PROT_WRITE
 # define FLAG_MAP MAP_ANON | MAP_PRIVATE
 # define MAP_SIZE ALIGN(sizeof(t_map))
