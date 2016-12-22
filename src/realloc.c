@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 08:30:36 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 08:31:22 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,11 @@ void			*realloc(void *ptr, size_t size)
 	t_block		*current;
 	void		*ret;
 
-	ft_putendl("realloc");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
 	{
-		ft_putendl("check ptr");
+		ft_putendl("\ncheck ptr");
 		show_alloc_mem();
 		ft_print_memory(ptr);
 		ft_putchar('\n');
