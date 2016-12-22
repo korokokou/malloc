@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 08:32:11 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 14:40:05 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void			*upsize(t_block *current, size_t size)
 	t_block		*next;
 	void		*ret;
 
-//	ft_putendl("upsize");
 	next = current->next;
 	if (next && next->freed == 0)
 	{
@@ -67,13 +66,7 @@ void			*realloc(void *ptr, size_t size)
 	if (ptr == NULL)
 		return (malloc(size));
 	if (!check(ptr, NULL))
-	{
-		ft_putendl("\ncheck ptr");
-		show_alloc_mem();
-		ft_print_memory(ptr);
-		ft_putchar('\n');
 		return (NULL);
-	}
 	if (size == 0)
 	{
 		free(ptr);
@@ -82,15 +75,10 @@ void			*realloc(void *ptr, size_t size)
 	size = ALIGN(size);
 	current = get_list(ptr);
 	if ((size_t)current->size < size)
-	{
 		ret = upsize(current, size);
-	}
 	else if ((size_t)current->size > size + 32)
-	{
 		ret = downsize(current, size);
-	}
 	else
 		ret = ptr;
-	check(ret, NULL);
 	return (ret);
 }

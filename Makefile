@@ -29,6 +29,7 @@ OBJDIR = obj
 LIB = -L libft/ -lft
 
 SRC = 	\
+		check.c \
 		free.c \
 		malloc.c \
 		calloc.c \

@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 08:27:54 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 14:39:12 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void			*initialize(unsigned int type)
 	t_map		*temp;
 	int			zone_size;
 
-//	ft_putendl("initialize");
 	if (type == 0)
 		zone_size = g_wall.page_size << 1;
 	else if (type == 1)
@@ -30,10 +29,7 @@ void			*initialize(unsigned int type)
 		zone_size = type;
 	new = mmap(NULL, zone_size, FLAG_PROT, FLAG_MAP, -1, 0);
 	if (new == (void *)-1)
-	{
-		ft_putendl("memory exausted");
 		return (NULL);	
-	}
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
@@ -101,25 +97,6 @@ int				get_type_of_country(int size)
 		return (size + MAP_SIZE + BLOCK_SIZE);
 }
 
-int             check_align( void *ret, int size)
-{
-	if (((unsigned long)ret & 15) || !check(ret, NULL) )
-	{
-		ft_putendl("*************************************************");
-		ft_putstr("unalligned   ");
-		ft_putnbr(size);
-		ft_putstr("   -    ");
-		ft_print_memory(ret);
-		ft_putchar('\n');
-		ft_putnbr(g_wall.map_size);
-		ft_putchar('\n');
-//		show_alloc_mem();
-		//exit(-1);
-		return (0);
-	}
-	(void)size;
-	return (1);
-}
 void			*malloc(size_t size)
 {
 	int			type;
@@ -132,16 +109,5 @@ void			*malloc(size_t size)
 	size = ALIGN(size);
 	type = get_type_of_country(size);
 	ret = find_zone(type, size);
-	if (ret == NULL)
-		ft_putendl("hum");
-	check_align(ret, size);
-/*	show_alloc_mem();
-	ft_print_memory(ret);
-	ft_putstr("   ");
-	ft_putnbr(size);
-	ft_putchar('\n');
-*/
-	check(ret, NULL);
-	count++;
 	return (ret);
 }

@@ -6,55 +6,13 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 07:35:10 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 14:41:13 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
 extern t_malloc	g_wall;
-extern int	count;
-
-int				check(t_block *p, t_map **country)
-{
-	t_map		*temp;
-	t_block		*b_temp;
-	t_block		*cast;
-
-	if (!p)
-		return (0);
-	temp = g_wall.countries;
-	while (temp)
-	{
-		if (p >= temp->region && (char *)p + p->size <= (char *)temp->end)
-		{
-			b_temp = temp->region;
-			cast = get_list(p);
-			while (b_temp)
-			{
-				if (b_temp == cast)
-					break;
-				b_temp = b_temp->next;
-			}
-			if (b_temp == NULL)
-			{
-				ft_putendl("NULL");
-				show_alloc_mem();
-				ft_print_memory(cast);
-				ft_putstr("\n\n");
-				ft_print_memory(temp->end);
-				ft_putstr("\n\n");
-				ft_print_memory(cast);
-				exit(0);
-			}
-			if (country)
-				*country = temp;
-			return (1);
-		}
-		temp = temp->next;
-	}
-	return (0);
-}
 
 void			large_munmap(t_map *country)
 {
@@ -121,11 +79,10 @@ void			free(void *p)
 
 	if (!check(p, &country))
 		return ;
-	count--;
 	cast = p;
 	cast -= g_wall.block_size;
 	temp = (t_block *)cast;
 	temp->freed = 1;
 	coalesce(country);
-	// check_free(country);
+	check_free(country);
 }
