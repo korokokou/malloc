@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/20 16:03:07 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 18:30:01 by takiapo          ###   ########.fr       */
+/*   Created: 2014/11/19 19:04:09 by takiapo           #+#    #+#             */
+/*   Updated: 2016/12/22 18:21:44 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include <stdlib.h>
+#include "../includes/libft.h"
 
-void			*ft_memcpy(void *s1, const void *s2, size_t n)
+void	ft_exit(char *str, int fd)
 {
-	char		*s1temp;
-	const char	*s2temp;
-	size_t		i;
-
-	s1temp = (char *)s1;
-	s2temp = (char *)s2;
-	i = 0;
-	while (i < n)
-	{
-		s1temp[i] = s2temp[i];
-		i++;
-	}
-	return (s1);
+	ft_putendl_fd(str, fd);
+	exit(1);
 }

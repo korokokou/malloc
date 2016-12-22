@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
+/*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/15 11:45:01 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 07:36:07 by takiapo          ###   ########.fr       */
+/*   Created: 2016/12/22 18:13:28 by takiapo           #+#    #+#             */
+/*   Updated: 2016/12/22 18:13:32 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void			*downsize(t_block *current, int size)
 {
 	t_block		*temp;
 	t_block		*next;
-
 	char		*cast;
 	int			next_size;
 
@@ -73,4 +72,3 @@ void			map_it(void *new, int type, int size)
 	size -= g_wall.map_size;
 	data->region = block_it(cast + g_wall.map_size, size, NULL);
 }
-

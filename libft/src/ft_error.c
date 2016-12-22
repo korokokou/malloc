@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2013/11/20 16:03:07 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 18:30:01 by takiapo          ###   ########.fr       */
+/*   Created: 2014/09/29 03:31:32 by takiapo           #+#    #+#             */
+/*   Updated: 2014/09/29 03:47:35 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include <stdlib.h>
+#include "../includes/libft.h"
 
-void			*ft_memcpy(void *s1, const void *s2, size_t n)
+int			ft_error(char *str)
 {
-	char		*s1temp;
-	const char	*s2temp;
-	size_t		i;
-
-	s1temp = (char *)s1;
-	s2temp = (char *)s2;
-	i = 0;
-	while (i < n)
-	{
-		s1temp[i] = s2temp[i];
-		i++;
-	}
-	return (s1);
+	if (str)
+		ft_putstr(str);
+	else
+		return (EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }

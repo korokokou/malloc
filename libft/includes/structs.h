@@ -6,13 +6,14 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/18 17:38:02 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/14 21:27:42 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 18:29:34 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 # include <string.h>
+
 typedef struct		s_list
 {
 	void			*content;

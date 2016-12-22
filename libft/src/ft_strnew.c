@@ -6,9 +6,10 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/26 17:48:23 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/13 17:04:58 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/29 03:37:47 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdlib.h>
 
 char		*ft_strnew(size_t size)

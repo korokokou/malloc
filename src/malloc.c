@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 17:46:00 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 18:02:02 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 t_malloc		g_wall = (t_malloc){0, 0, MAP_SIZE, BLOCK_SIZE};
 pthread_mutex_t	g_malloc_lock;
-
 
 void			*initialize(unsigned int type)
 {
@@ -30,7 +29,7 @@ void			*initialize(unsigned int type)
 		zone_size = type;
 	new = mmap(NULL, zone_size, FLAG_PROT, FLAG_MAP, -1, 0);
 	if (new == (void *)-1)
-		return (NULL);	
+		return (NULL);
 	map_it(new, type, zone_size);
 	if (!g_wall.countries)
 		return (g_wall.countries = new);
@@ -107,10 +106,10 @@ void			*malloc(size_t size)
 		g_wall.page_size = getpagesize();
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
-	pthread_mutex_lock(&g_malloc_lock);	
+	pthread_mutex_lock(&g_malloc_lock);
 	size = ALIGN(size);
 	type = get_type_of_country(size);
 	ret = find_zone(type, size);
-	pthread_mutex_unlock(&g_malloc_lock);	
+	pthread_mutex_unlock(&g_malloc_lock);
 	return (ret);
 }

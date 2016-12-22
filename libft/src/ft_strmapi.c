@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/24 18:48:13 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/13 17:11:39 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 18:19:50 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static size_t		ft_strlen(const char *str)
 }
 
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char))
-
 {
 	char	*p;
 	char	*p2;

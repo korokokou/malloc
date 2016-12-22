@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
+/*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/22 12:33:35 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 12:35:12 by takiapo          ###   ########.fr       */
+/*   Created: 2016/12/22 18:06:06 by takiapo           #+#    #+#             */
+/*   Updated: 2016/12/22 18:06:31 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "malloc.h"
 
 extern			t_malloc	g_wall;
 
@@ -22,7 +22,7 @@ int				is_it_mine(t_block *p, t_map *temp)
 	while (b_temp)
 	{
 		if (b_temp == p)
-			break;
+			break ;
 		b_temp = b_temp->next;
 	}
 	if (b_temp == NULL)
@@ -40,7 +40,8 @@ int				check(t_block *p, t_map **country)
 	p = get_list(p);
 	while (temp)
 	{
-		if ((long int)p >= (long int)temp->region && (long int)p < (long int)temp->end)
+		if ((long int)p >= (long int)temp->region
+				&& (long int)p < (long int)temp->end)
 		{
 			if (country)
 				*country = temp;

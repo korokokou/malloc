@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   realloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
+/*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 17:45:26 by takiapo          ###   ########.fr       */
+/*   Created: 2016/12/22 18:06:46 by takiapo           #+#    #+#             */
+/*   Updated: 2016/12/22 18:06:47 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_block			*get_list(void *ptr)
 	t_block		*ret;
 	char		*cast;
 
-	cast = ptr;	
+	cast = ptr;
 	cast -= BLOCK_SIZE;
 	ret = (t_block *)cast;
 	return (ret);

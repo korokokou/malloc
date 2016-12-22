@@ -6,9 +6,10 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/20 16:03:07 by takiapo           #+#    #+#             */
-/*   Updated: 2014/04/15 19:22:05 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/29 03:40:00 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <unistd.h>
 
 void	ft_putchar_fd(char c, int fd)

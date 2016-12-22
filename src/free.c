@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/24 00:28:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 17:45:46 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 18:02:52 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			check_free(t_map *country)
 {
 	t_block		*temp;
 
-	if (country) 
+	if (country)
 	{
 		temp = country->region;
 		while (temp)
@@ -87,5 +87,5 @@ void			free(void *p)
 	temp->freed = 1;
 	coalesce(country);
 	check_free(country);
-	pthread_mutex_unlock(&g_malloc_lock);	
+	pthread_mutex_unlock(&g_malloc_lock);
 }

@@ -1,72 +1,90 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsplit2.c                                     :+:      :+:    :+:   */
+/*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: takiapo <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/05/08 19:43:15 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/13 17:11:23 by takiapo          ###   ########.fr       */
+/*   Created: 2016/09/13 19:02:24 by takiapo           #+#    #+#             */
+/*   Updated: 2016/09/13 19:03:50 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <string.h>
 #include <stdlib.h>
+#include "includes/libft.h"
 
-static char		*ft_strcpy(char *s1, const char *s2)
+static size_t	ft_wordsize(char const *s, char c)
 {
-	int			i;
+	size_t	size;
 
-	i = 0;
-	while (s2[i] != '\0')
-	{
-		s1[i] = s2[i];
-		i++;
-	}
-	s1[i] = '\0';
-	return (s1);
-}
-
-static int		ft_strlen(const char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
-}
-
-char			*get_s(char *s, char c)
-{
+	size = 0;
 	while (*s != '\0' && *s != c)
+	{
 		s++;
-	*s = '\0';
-	return (s);
+		size++;
+	}
+	return (size);
+}
+
+static size_t	ft_countwords(char const *s, char c)
+{
+	size_t	count;
+
+	count = 0;
+	while (*s != '\0')
+	{
+		if (*s != c && (*(s + 1) == c || *(s + 1) == '\0'))
+			count++;
+		s++;
+	}
+	return (count);
 }
 
 char			**ft_strsplit(char const *s, char c)
 {
-	char		**young_link;
-	char		**link;
-	char		*sword;
+	char	**tab;
+	size_t	nb_words;
+	size_t	i;
+	size_t	word_size;
 
-	if (s == NULL)
+	nb_words = ft_countwords(s, c);
+	if (!(tab = malloc((nb_words + 1) * sizeof(*tab))))
 		return (NULL);
-	sword = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
-	link = (char **)malloc(sizeof(char *) * ft_strlen(s) / 2 + 1);
-	sword = ft_strcpy(sword, s);
-	if (sword == NULL || link == NULL)
-		return (NULL);
-	young_link = link;
-	while (*sword)
+	i = -1;
+	while (++i < nb_words && *s)
 	{
-		if (*sword != c && *sword != '\0')
+		while (*s == c)
+			s++;
+		word_size = ft_wordsize(s, c);
+		if (!(tab[i] = malloc((word_size + 1) * sizeof(**tab))))
 		{
-			*link++ = sword;
-			sword = get_s(sword, c);
+			free(tab);
+			return (NULL);
 		}
-		sword++;
+		ft_strncpy(tab[i], s, word_size);
+		tab[i][word_size] = '\0';
+		s += word_size;
 	}
-	return (young_link);
+	tab[i] = NULL;
+	return (tab);
+}
+
+char			**ft_strsplit_once(char const *s, char c)
+{
+	char	*at;
+	size_t	at_index;
+	char	**tab;
+
+	tab = NULL;
+	if ((at = ft_strchr(s, c)))
+	{
+		if (!(tab = ft_memalloc(sizeof(char *) * (2 + 1))))
+			return (NULL);
+		at_index = at - s;
+		tab[0] = ft_strsub(s, 0, at_index);
+		tab[1] = ft_strsub(s, at_index + 1, ft_strlen(s) - (at_index + 1));
+		tab[2] = NULL;
+	}
+	return (tab);
 }

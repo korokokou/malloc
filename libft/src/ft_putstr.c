@@ -6,9 +6,10 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/20 16:05:59 by takiapo           #+#    #+#             */
-/*   Updated: 2014/09/13 16:41:10 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/29 03:38:26 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <unistd.h>
 
 static size_t		ft_strlen(const char *str)

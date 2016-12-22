@@ -6,9 +6,10 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/04/16 00:55:33 by takiapo           #+#    #+#             */
-/*   Updated: 2014/06/06 14:22:22 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/29 03:38:04 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <string.h>
 
 char	*ft_strcpy(char *s1, const char *s2)

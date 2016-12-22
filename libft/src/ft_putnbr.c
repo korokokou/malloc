@@ -6,9 +6,10 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/24 17:08:56 by takiapo           #+#    #+#             */
-/*   Updated: 2013/12/11 11:40:31 by takiapo          ###   ########.fr       */
+/*   Updated: 2014/09/29 03:38:36 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "includes/libft.h"
 
 void	ft_putnbr(int n)
