@@ -6,7 +6,7 @@
 /*   By: takiapo <takiapo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/09/23 10:52:12 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 08:08:28 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 08:27:54 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,6 @@ void			*malloc(size_t size)
 	if (size <= 0 || g_wall.map_size == 0)
 		return (NULL);
 	size = ALIGN(size);
-	ft_putnbr(size);
-	ft_putchar('\n');
 	type = get_type_of_country(size);
 	ret = find_zone(type, size);
 	if (ret == NULL)
