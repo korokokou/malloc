@@ -6,7 +6,7 @@
 /*   By: takiapo </var/mail/takiapo>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/15 11:34:26 by takiapo           #+#    #+#             */
-/*   Updated: 2016/12/22 08:31:22 by takiapo          ###   ########.fr       */
+/*   Updated: 2016/12/22 08:32:11 by takiapo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,5 @@ void			*realloc(void *ptr, size_t size)
 	else
 		ret = ptr;
 	check(ret, NULL);
-	ft_putendl("out");
 	return (ret);
 }
